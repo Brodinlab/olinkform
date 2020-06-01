@@ -2,17 +2,17 @@
 olinkform
 =========
 
-
 .. image:: https://img.shields.io/pypi/v/olinkform.svg
         :target: https://pypi.python.org/pypi/olinkform
 
-.. image:: https://img.shields.io/travis/nehcgnay/olinkform.svg
-        :target: https://travis-ci.com/nehcgnay/olinkform
+.. image:: https://github.com/Brodinlab/olinkform/workflows/Python%20package/badge.svg?branch=master
+
+.. image:: https://github.com/Brodinlab/olinkform/workflows/Upload%20Python%20Package/badge.svg
+
 
 .. image:: https://readthedocs.org/projects/olinkform/badge/?version=latest
         :target: https://olinkform.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
-
 
 
 
