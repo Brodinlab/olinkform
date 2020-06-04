@@ -23,10 +23,34 @@ The preprocessing lib for olink data
 * Documentation: https://olinkform.readthedocs.io.
 
 
-Features
---------
+Usage
+-----
 
-* TODO
+Parse a data file
+
+.. code:: python
+
+    from olinkform import parse
+
+    result = parse(path, version)
+    # version v1 or v2 are supported,
+    # which are corresponding to the old and new olink formats, individually
+
+The result is a dict with the following format
+
+.. code::
+
+    {
+        "sampleId": {
+            "markerId" : {
+                "batch": string
+                "value": float,
+                "LOD": float,
+                "MDF": float
+            }
+        }
+    }
+
 
 Credits
 -------

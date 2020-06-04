@@ -7,7 +7,9 @@ Development Lead
 
 * Yang Chen <yang.chen@scilifelab.se>
 
+* Lucie Rodriguez <lucie.rodriguez@scilifelab.se>
+
 Contributors
 ------------
 
-None yet. Why not be the first?
+

@@ -2,23 +2,12 @@
 
 """Tests for `olinkform` package."""
 
-import pytest
+from olinkform import parse
 
 
-from olinkform import olinkform
+def test_parse():
+    r1 = parse('tests/data/v1.xlsx', 'v1')
+    assert len(r1) == 112
 
-
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
-
-
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+    r2 = parse('tests/data/v2.xlsx', 'v2')
+    assert len(r2) == 90
