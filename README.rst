@@ -51,6 +51,20 @@ The result is a dict with the following format
         }
     }
 
+Parse a data file to dataframe
+
+.. code:: python
+
+    from olinkform import parse_to_dataframe
+
+    df = parse_to_dataframe(path, version)
+
+
+The result is a dataframe with columns:
+
+.. code:: python
+
+    ['batch', 'sample_id','marker', 'value', 'LOD', 'MDF']
 
 Credits
 -------

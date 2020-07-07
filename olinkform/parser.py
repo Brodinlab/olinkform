@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def parser_v1(df, batch='Unknown'):
@@ -7,11 +8,11 @@ def parser_v1(df, batch='Unknown'):
     # Sample as keys fix
     df = df.set_index("linear")
     # linear NPX to NPX (log2)
-    sample_dict = {}
+    sample_dict = dict()
     for i in range(len(df.index) - 5):
         sample_name = df.index[i]
         sample_name = sample_name[-6:]
-        dict_for_this_sample = {}
+        dict_for_this_sample = dict()
         for j in range(len(df.columns)):
             name_of_prot = df.columns[j]
             dict_for_this_sample[name_of_prot] = {'value': np.log2(df.iloc[i, j]), 'LOD': df.iloc[-1, j],
@@ -28,9 +29,9 @@ def parser_v2(df, batch='190520_brodin'):
     df = df.drop(['QC Warning', 'Plate ID'], axis=1)
     # Sample as keys fix
     df = df.set_index("Assay")
-    sample_dict = {}
+    sample_dict = dict()
     for i in range(len(df.index) - 2):
-        dict_for_this_sample = {}
+        dict_for_this_sample = dict()
         for j in range(len(df.columns)):
             name_of_prot = df.columns[j]
             dict_for_this_sample[name_of_prot] = {'value': df.iloc[i, j], 'LOD': df.iloc[-2, j],
@@ -38,6 +39,16 @@ def parser_v2(df, batch='190520_brodin'):
         sample_name = df.index[i].replace(' - ', '_').replace('-', '_')
         sample_dict[sample_name] = dict_for_this_sample
     return sample_dict
+
+
+def results_to_dataframe(sample_dict):
+    items = list()
+    for sample_id in sample_dict.keys():
+        sample = sample_dict[sample_id]
+        for marker_id in sample.keys():
+            value = {**sample[marker_id], 'sample_id': sample_id, 'marker': marker_id}
+            items.append(value)
+    return pd.DataFrame(items)[['batch', 'sample_id', 'marker', 'value', 'LOD', 'MDF']]
 
 
 def get_parser(version):
