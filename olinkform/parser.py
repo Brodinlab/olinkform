@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def parser_v1(df, batch='Unknown'):
+def parser_v1(df):
     df = df.iloc[:-18, :-8]  # remove unnecessary rows
     df.columns = df.columns.str[4:]  # to match protein naming in new Olink format
     # Sample as keys fix
@@ -13,15 +13,15 @@ def parser_v1(df, batch='Unknown'):
         sample_name = df.index[i]
         sample_name = sample_name[-6:]
         dict_for_this_sample = dict()
-        for j in range(len(df.columns)):
+        for j in range(len(df.columns)-2):
             name_of_prot = df.columns[j]
             dict_for_this_sample[name_of_prot] = {'value': np.log2(df.iloc[i, j]), 'LOD': df.iloc[-1, j],
-                                                  'MDF': df.iloc[-5, j], 'batch': batch}
+                                                  'MDF': df.iloc[-5,j], 'batch': int(df.iloc[i,-2]), 'projectID': df.iloc[i,-1]}
         sample_dict[sample_name] = dict_for_this_sample
     return sample_dict
 
 
-def parser_v2(df, batch='190520_brodin'):
+def parser_v2(df):
     # dropping unwanted/unnecessary rows
     df = df.drop([0, 1, 3, 4, 5, 96])
     df = df.rename(columns=df.iloc[0]).drop(df.index[0])
@@ -32,10 +32,10 @@ def parser_v2(df, batch='190520_brodin'):
     sample_dict = dict()
     for i in range(len(df.index) - 2):
         dict_for_this_sample = dict()
-        for j in range(len(df.columns)):
+        for j in range(len(df.columns)-2):
             name_of_prot = df.columns[j]
             dict_for_this_sample[name_of_prot] = {'value': df.iloc[i, j], 'LOD': df.iloc[-2, j],
-                                                  'MDF': df.iloc[-1, j], 'batch': batch}
+                                                  'MDF': df.iloc[-1, j], 'batch': df.iloc[i,-2], 'projectID': df.iloc[i,-1]}
         sample_name = df.index[i].replace(' - ', '_').replace('-', '_')
         sample_dict[sample_name] = dict_for_this_sample
     return sample_dict
@@ -48,7 +48,7 @@ def results_to_dataframe(sample_dict):
         for marker_id in sample.keys():
             value = {**sample[marker_id], 'sample_id': sample_id, 'marker': marker_id}
             items.append(value)
-    return pd.DataFrame(items)[['batch', 'sample_id', 'marker', 'value', 'LOD', 'MDF']]
+    return pd.DataFrame(items)[['batch', 'projectID', 'sample_id', 'marker', 'value', 'LOD', 'MDF']]
 
 
 def get_parser(version):
