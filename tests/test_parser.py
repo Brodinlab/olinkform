@@ -8,7 +8,7 @@ from olinkform.parser import parser_v1, parser_v2, results_to_dataframe
 
 def test_parser_v1():
     # check length, keys, markers and dict value
-    f = 'tests/data/v1.xlsx'
+    f = 'tests/data/new_v1.xlsx'
     df = pd.read_excel(f)
     r = parser_v1(df)
     assert len(r) == 112
@@ -39,12 +39,12 @@ def test_parser_v1():
 
     assert set(r['130905'].keys()) == set(expected_markers)
     assert r['130905']['NT-3'] == {'value': 0.8318772411916731, 'LOD': 1.78, 'MDF': 0.14049586776859502,
-                                   'batch': 'Unknown'}
+                                   'batch': '2015020', 'projectID': 'baby'}
 
 
 def test_parser_v2():
     # check length, keys, markers and dict value
-    f = 'tests/data/v2.xlsx'
+    f = 'tests/data/new_v2.xlsx'
     df = pd.read_excel(f)
     r = parser_v2(df)
     assert len(r) == 90
@@ -97,23 +97,23 @@ def test_parser_v2():
                         'NEFL', 'HMOX2', 'RNF31', 'DPEP1', 'SNCG', 'IL3RA', 'AOC1', 'KIF1BP', 'PPP3R1', 'ILKAP',
                         'ISLR2', 'ING1', 'PMVK', 'WWP2', 'FKBP5', 'GGT5', 'CD63']
     assert set(r['ME/CFS_001_B'].keys()) == set(expected_markers)
-    assert r['ME/CFS_001_B']['CD63'] == {'value': 5.93737, 'LOD': -1.05438, 'MDF': 0.04444, 'batch': '190520_brodin'}
+    assert r['ME/CFS_001_B']['CD63'] == {'value': 5.93737, 'LOD': -1.05438, 'MDF': 0.04444, 'batch': '190520', 'projectID': 'ME/CFS'}
 
 
 def test_results_to_dataframe():
     r = OrderedDict()
 
     r['ME/CFS_001_B'] = {
-        'CD63': {'value': 5.93737, 'LOD': -1.05438, 'MDF': 0.04444, 'batch': '190520_brodin'}
+        'CD63': {'value': 5.93737, 'LOD': -1.05438, 'MDF': 0.04444, 'batch': '190520', 'projectID': 'ME/CFS'}
     }
     r['ME/CFS_003_T1'] = OrderedDict()
-    r['ME/CFS_003_T1']['PFDN2'] = {'value': 1.55192, 'LOD': 1.08316, 'MDF': 0.11111, 'batch': '190520_brodin'}
-    r['ME/CFS_003_T1']['ABHD14B'] = {'value': 0.55768, 'LOD': -0.12011, 'MDF': 0.2, 'batch': '190520_brodin'}
+    r['ME/CFS_003_T1']['PFDN2'] = {'value': 1.55192, 'LOD': 1.08316, 'MDF': 0.11111, 'batch': '190520', 'projectID': 'ME/CFS'}
+    r['ME/CFS_003_T1']['ABHD14B'] = {'value': 0.55768, 'LOD': -0.12011, 'MDF': 0.2, 'batch': '190520', 'projectID': 'ME/CFS'}
 
     df = results_to_dataframe(r)
-    expected = pd.DataFrame([['190520_brodin', 'ME/CFS_001_B', 'CD63', 5.93737, -1.05438, 0.04444],
-                             ['190520_brodin', 'ME/CFS_003_T1', 'PFDN2', 1.55192, 1.08316, 0.11111],
-                             ['190520_brodin', 'ME/CFS_003_T1', 'ABHD14B', 0.55768, -0.12011, 0.2]
+    expected = pd.DataFrame([['190520', 'ME/CFS', 'ME/CFS_001_B', 'CD63', 5.93737, -1.05438, 0.04444],
+                             ['190520', 'ME/CFS', 'ME/CFS_003_T1', 'PFDN2', 1.55192, 1.08316, 0.11111],
+                             ['190520', 'ME/CFS', 'ME/CFS_003_T1', 'ABHD14B', 0.55768, -0.12011, 0.2]
                              ],
-                            columns=['batch', 'sample_id', 'marker', 'value', 'LOD', 'MDF'])
+                            columns=['batch', 'projectID', 'sample_id', 'marker', 'value', 'LOD', 'MDF'])
     assert_frame_equal(df, expected)
