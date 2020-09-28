@@ -44,7 +44,7 @@ def test_parser_v1():
 
 def test_parser_v2():
     # check length, keys, markers and dict value
-    f = 'tests/data/new_v2.xlsx'
+    f = 'tests/data/new_v3.xlsx'
     df = pd.read_excel(f)
     r = parser_v2(df)
     assert len(r) == 90
