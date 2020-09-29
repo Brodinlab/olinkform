@@ -16,7 +16,7 @@ def parser_v1(df):
         for j in range(len(df.columns)-2):
             name_of_prot = df.columns[j]
             dict_for_this_sample[name_of_prot] = {'value': np.log2(df.iloc[i, j]), 'LOD': df.iloc[-1, j],
-                                                  'MDF': df.iloc[-5,j], 'batch': int(df.iloc[i,-2]), 'projectID': df.iloc[i,-1]}
+                                                  'MDF': df.iloc[-5,j], 'batch': int(df.iloc[i,-2]), 'project_id': df.iloc[i,-1]}
         sample_dict[sample_name] = dict_for_this_sample
     return sample_dict
 
@@ -35,7 +35,7 @@ def parser_v2(df):
         for j in range(len(df.columns)-2):
             name_of_prot = df.columns[j]
             dict_for_this_sample[name_of_prot] = {'value': df.iloc[i, j], 'LOD': df.iloc[-2, j],
-                                                  'MDF': df.iloc[-1, j], 'batch': df.iloc[i,-2], 'projectID': df.iloc[i,-1]}
+                                                  'MDF': df.iloc[-1, j], 'batch': df.iloc[i,-2], 'project_id': df.iloc[i,-1]}
         sample_name = df.index[i].replace(' - ', '_').replace('-', '_')
         sample_dict[sample_name] = dict_for_this_sample
     return sample_dict
@@ -48,7 +48,11 @@ def results_to_dataframe(sample_dict):
         for marker_id in sample.keys():
             value = {**sample[marker_id], 'sample_id': sample_id, 'marker': marker_id}
             items.append(value)
-    return pd.DataFrame(items)[['batch', 'projectID', 'sample_id', 'marker', 'value', 'LOD', 'MDF']]
+    df = pd.DataFrame(items)[['batch', 'project_id', 'sample_id', 'marker', 'value', 'LOD', 'MDF']]
+    df['batch'] = df['batch'].astype(str)
+    df['project_id'] = df['project_id'].astype(str)
+    df['sample_id'] = df['sample_id'].astype(str)
+    return df
 
 
 def get_parser(version):
