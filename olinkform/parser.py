@@ -23,7 +23,7 @@ def parser_v1(df):
 
 def parser_v2(df):
     # dropping unwanted/unnecessary rows
-    df = df.drop([0, 1, 3, 4, 5, 96])
+    df = df.drop([0, 1, 3, 4, 5])
     df = df.rename(columns=df.iloc[0]).drop(df.index[0])
     # dropping unwanted columns
     df = df.drop(['QC Warning', 'Plate ID'], axis=1)
